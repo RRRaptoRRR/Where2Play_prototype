@@ -1,0 +1,93 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+}
+
+.events-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.events-table th, .events-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    vertical-align: top;
+}
+
+.events-table th {
+    background-color: #009879;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.events-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Ссылки */
+a {
+    color: #009879;
+    text-decoration: none;
+    border-bottom: 1px dashed transparent;
+    transition: all 0.2s;
+}
+
+a:hover {
+    color: #007f65;
+    border-bottom: 1px dashed #007f65;
+}
+
+/* Стили для тегов и списков */
+.tag-link, .game-link, .rule-link {
+    display: inline-block;
+    margin-bottom: 2px;
+}
+
+.location-info {
+    line-height: 1.5;
+}
+
+.address-link {
+    color: #666;
+    font-size: 0.95em;
+}
+
+/* Кнопка */
+.btn-details {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 8px;
+    font-size: 12px;
+    transition: background-color 0.2s;
+}
+
+.btn-details:hover {
+    background-color: #2980b9;
+}

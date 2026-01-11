@@ -21,7 +21,7 @@ public class Game {
 
     private String description;
 
-    @Column(name = "maxplayers")
+    @Column(name = "max_players")
     private Integer maxPlayers;
 
     private String difficulty; // Можно сделать Enum, если значения фиксированы
@@ -29,9 +29,9 @@ public class Game {
 
     @ManyToMany
     @JoinTable(
-            name = "gamestogenre",
-            joinColumns = @JoinColumn(name = "gameid"),
-            inverseJoinColumns = @JoinColumn(name = "genreid")
+            name = "games_to_genre",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
     private List<Genre> genres;
 }

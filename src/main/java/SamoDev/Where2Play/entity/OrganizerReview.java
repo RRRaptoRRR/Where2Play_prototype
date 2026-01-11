@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "organizerreviews")
+@Table(name = "organizer_reviews")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,7 +15,7 @@ public class OrganizerReview {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "organizerid", nullable = false)
+    @JoinColumn(name = "organizer_id", nullable = false)
     private Organizer organizer;
 
     @Column(nullable = false)

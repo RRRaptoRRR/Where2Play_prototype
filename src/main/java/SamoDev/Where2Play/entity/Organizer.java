@@ -17,7 +17,7 @@ public class Organizer {
     private Integer id;
 
     @OneToOne
-    @JoinColumn(name = "userid", nullable = false, unique = true)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
     @OneToMany(mappedBy = "organizer")

@@ -22,20 +22,20 @@ public class Event {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "organizerid", nullable = false)
+    @JoinColumn(name = "organizer_id", nullable = false)
     private Organizer organizer;
 
     @ManyToOne
-    @JoinColumn(name = "placeid", nullable = false)
+    @JoinColumn(name = "place_id", nullable = false)
     private Place place;
 
     @Column(nullable = false)
     private LocalDateTime data;
 
-    @Column(name = "maxplayers", nullable = false)
+    @Column(name = "max_players", nullable = false)
     private Integer maxPlayers;
 
-    @Column(name = "nowplayers")
+    @Column(name = "now_players")
     private Integer nowPlayers = 1;
 
     @Enumerated(EnumType.STRING)
@@ -44,36 +44,36 @@ public class Event {
     // Связь с участниками (eventstoplayers)
     @ManyToMany
     @JoinTable(
-            name = "eventstoplayers",
-            joinColumns = @JoinColumn(name = "eventid"),
-            inverseJoinColumns = @JoinColumn(name = "userid")
+            name = "events_to_players",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> participants;
 
     // Связь с играми (eventstogames)
     @ManyToMany
     @JoinTable(
-            name = "eventstogames",
-            joinColumns = @JoinColumn(name = "eventid"),
-            inverseJoinColumns = @JoinColumn(name = "gameid")
+            name = "events_to_games",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_id")
     )
     private List<Game> games;
 
     // Связь с темами (eventstothemes)
     @ManyToMany
     @JoinTable(
-            name = "eventstothemes",
-            joinColumns = @JoinColumn(name = "eventid"),
-            inverseJoinColumns = @JoinColumn(name = "themeid")
+            name = "events_to_themes",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "theme_id")
     )
     private List<Theme> themes;
 
     // Связь с правилами (eventstorules)
     @ManyToMany
     @JoinTable(
-            name = "eventstorules",
-            joinColumns = @JoinColumn(name = "eventid"),
-            inverseJoinColumns = @JoinColumn(name = "ruleid")
+            name = "events_to_rules",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "rule_id")
     )
     private List<Rule> rules;
 }

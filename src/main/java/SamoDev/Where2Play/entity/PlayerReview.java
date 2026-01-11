@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "playerreview")
+@Table(name = "player_review")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,7 +15,7 @@ public class PlayerReview {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "userid", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(nullable = false)

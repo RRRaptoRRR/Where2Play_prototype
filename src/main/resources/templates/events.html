@@ -1,10 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+    <meta charset="UTF-8">
+    <title>Ближайшие события | Where2Play</title>
+    <!-- Исправлено имя файла стилей -->
+    <link rel="stylesheet" href="/css/events.css">
 </head>
 <body>
+
+<div class="container">
+    <h1>Предстоящие мероприятия</h1>
+
+    <table class="events-table">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Организатор</th>
+            <th>Дата</th>
+            <th>Описание</th>
+            <th>Темы</th>
+            <th>Правила</th>
+            <th>Место проведения</th>
+            <th>Игры</th>
+            <th>Игроки</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="event : ${events}">
+            <td th:text="${event.eventTitle}">Название</td>
+            <td th:text="${event.organizerName}">Организатор</td>
+            <td th:text="${#temporals.format(event.eventDate, 'dd.MM.yyyy HH:mm')}">Дата</td>
+            <td th:text="${event.eventDescription}">Описание</td>
+
+            <td>
+                <div th:if="${event.topicsList != null}">
+                    <div th:each="topic : ${#strings.arraySplit(event.topicsList, ',')}">
+                        <a href="#" class="tag-link" th:text="${topic.trim()}">Тема</a>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div th:if="${event.rulesList != null}">
+                    <div th:each="rule : ${#strings.arraySplit(event.rulesList, ',')}">
+                        <a href="#" class="rule-link" th:text="${rule.trim()}">Правило</a>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div class="location-info">
+                    <a href="#" class="place-link" th:text="${event.city}">Город</a>
+                    <span th:if="${event.district != null}">,
+                        <a href="#" class="place-link" th:text="${event.district}">Район</a>
+                    </span>
+                    <br>
+                    <a href="#" class="address-link" th:text="${event.address}">Адрес</a>
+                </div>
+            </td>
+
+            <td>
+                <div th:if="${event.gamesList != null}">
+                    <div th:each="game : ${#strings.arraySplit(event.gamesList, ',')}">
+                        <a href="#" class="game-link" th:text="${game.trim()}">Игра</a>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <span th:text="${event.currentPlayers} + '/' + ${event.maxPlayers}"
+                      style="font-weight: bold;">0/0</span>
+                <br>
+                <button type="button" class="btn-details">Подробнее</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
