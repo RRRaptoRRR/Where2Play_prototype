@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Главное меню | Where2Play</title>
+  <!-- Подключаем тот же CSS, но можно создать отдельный menu.css -->
+  <link rel="stylesheet" href="/css/menu.css">
+  <!-- Подключаем FontAwesome для иконок (календарь, плюс, список) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- Хедер с профилем -->
+<header class="main-header">
+  <div class="user-profile">
+    <div class="avatar-circle">
+      <i class="fa-regular fa-user"></i>
+    </div>
+    <div class="user-info">
+      <span class="user-name" th:text="${username} ?: 'Гость'">Иван Иванов</span>
+      <!-- Можно добавить роль или статус -->
+    </div>
+  </div>
+  <form th:action="@{/logout}" method="post" class="logout-form">
+    <button type="submit" class="btn-logout">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i> Выход
+    </button>
+  </form>
+</header>
+
+<div class="menu-container">
+  <h1 class="menu-title">Главное меню</h1>
+
+  <div class="menu-buttons">
+    <!-- Кнопка "Создать игру" -->
+    <a href="#" class="menu-card card-create">
+      <div class="icon-circle">
+        <i class="fa-solid fa-plus"></i>
+      </div>
+      <span class="card-text">Создать игру</span>
+    </a>
+
+    <!-- Кнопка "Записаться на игру" (Ведет на таблицу ивентов) -->
+    <a th:href="@{/events}" class="menu-card card-join">
+      <div class="icon-circle">
+        <i class="fa-solid fa-list-ul"></i>
+      </div>
+      <span class="card-text">Записаться на игру</span>
+    </a>
+
+    <!-- Кнопка "Календарь игр" -->
+    <a href="#" class="menu-card card-calendar">
+      <div class="icon-circle">
+        <i class="fa-regular fa-calendar"></i>
+      </div>
+      <span class="card-text">Календарь игр</span>
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

@@ -19,7 +19,8 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @GetMapping("/")
+    // ИЗМЕНИЛИ МАППИНГ С "/" НА "/events"
+    @GetMapping("/events")
     public String showEvents(Model model) {
         List<UpcomingEventSummary> events = eventService.getUpcomingEvents();
         model.addAttribute("events", events);
