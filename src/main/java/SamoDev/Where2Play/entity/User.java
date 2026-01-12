@@ -4,12 +4,19 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter // Генерирует геттеры
+@Setter // Генерирует сеттеры
+@NoArgsConstructor // Пустой конструктор (обязателен для Hibernate)
+@AllArgsConstructor // Конструктор со всеми полями
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

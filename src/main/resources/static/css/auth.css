@@ -1,0 +1,152 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+.auth-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.logo-area {
+    margin-bottom: 20px;
+}
+
+.logo-circle {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.logo-area h2 {
+    margin: 0;
+    color: #333;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+h3 {
+    margin: 10px 0 5px;
+    color: #333;
+}
+
+.subtitle {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box; /* Важно для отступов */
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.forgot-link {
+    text-align: right;
+    margin-top: 5px;
+}
+
+.forgot-link a, .footer-link a, .back-link {
+    color: #3498db;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background-color: #1a56db; /* Синий цвет как на макете */
+    color: white;
+    border: none;
+    border-radius: 25px; /* Закругленные края как на макете */
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background-color: #1545b3;
+}
+
+.footer-link {
+    margin-top: 25px;
+    font-size: 14px;
+    color: #888;
+}
+
+.header-nav {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert-danger {
+    background-color: #ffe6e6;
+    color: #d63031;
+    border: 1px solid #fadbd8;
+}
+
+.alert-success {
+    background-color: #e8f8f5;
+    color: #27ae60;
+    border: 1px solid #d4efdf;
+}
+
+.alert-info {
+    background-color: #eaf2f8;
+    color: #2980b9;
+}
