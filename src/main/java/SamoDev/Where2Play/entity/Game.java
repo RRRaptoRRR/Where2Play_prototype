@@ -24,7 +24,9 @@ public class Game {
     @Column(name = "max_players")
     private Integer maxPlayers;
 
-    private String difficulty; // Можно сделать Enum, если значения фиксированы
+    @Enumerated(EnumType.STRING) // [web:118][web:120]
+    private Difficulty difficulty;
+
     private Integer time;
 
     @ManyToMany

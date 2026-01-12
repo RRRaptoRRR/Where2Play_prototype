@@ -41,7 +41,7 @@ public class Event {
     @Enumerated(EnumType.STRING)
     private EventStatus status = EventStatus.ACTIVE;
 
-    // Связь с участниками (eventstoplayers)
+    // Связь с участниками (events_to_players)
     @ManyToMany
     @JoinTable(
             name = "events_to_players",
@@ -50,7 +50,7 @@ public class Event {
     )
     private List<User> participants;
 
-    // Связь с играми (eventstogames)
+    // Связь с играми (events_to_games)
     @ManyToMany
     @JoinTable(
             name = "events_to_games",
@@ -59,7 +59,7 @@ public class Event {
     )
     private List<Game> games;
 
-    // Связь с темами (eventstothemes)
+    // Связь с темами (events_to_themes)
     @ManyToMany
     @JoinTable(
             name = "events_to_themes",
@@ -68,7 +68,7 @@ public class Event {
     )
     private List<Theme> themes;
 
-    // Связь с правилами (eventstorules)
+    // Связь с правилами (events_to_rules)
     @ManyToMany
     @JoinTable(
             name = "events_to_rules",
