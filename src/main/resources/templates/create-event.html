@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Создание события | Where2Play</title>
+  <link rel="stylesheet" href="/css/create-event.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="header">
+  <button id="btnBack" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Назад</button>
+  <h1>Новое событие</h1>
+</header>
+
+<div class="container">
+  <form id="createEventForm">
+    <!-- Основная инфо -->
+    <section class="form-section">
+      <h2>Основная информация</h2>
+      <div class="form-group">
+        <label>Название</label>
+        <input type="text" name="name" required placeholder="Например: Игротека в центре">
+      </div>
+      <div class="form-group">
+        <label>Описание</label>
+        <textarea name="description" rows="3"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Дата и время</label>
+          <input type="datetime-local" name="date" required>
+        </div>
+        <div class="form-group">
+          <label>Макс. участников</label>
+          <input type="number" name="maxPlayers" min="1" value="4">
+        </div>
+      </div>
+    </section>
+
+    <!-- Место -->
+    <section class="form-section">
+      <div class="section-header">
+        <h2>Место проведения</h2>
+        <button type="button" class="btn-small" onclick="openModal('placeModal')">+ Создать новое</button>
+      </div>
+      <div class="selection-area">
+        <input type="text" id="placeSearch" placeholder="Поиск места..." oninput="searchPlaces(this.value)">
+        <div id="placeResults" class="search-results"></div>
+        <div id="selectedPlace" class="selected-item" style="display:none;">
+          <span id="selectedPlaceName"></span>
+          <button type="button" onclick="removePlace()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <!-- Скрытые поля для выбранного места -->
+      <input type="hidden" id="placeId" name="placeId">
+    </section>
+
+    <!-- Игры -->
+    <section class="form-section">
+      <div class="section-header">
+        <h2>Игры</h2>
+        <button type="button" class="btn-small" onclick="openModal('gameModal')">+ Добавить новую</button>
+      </div>
+      <div class="selection-area">
+        <input type="text" placeholder="Поиск игры..." oninput="searchGames(this.value)">
+        <div id="gameResults" class="search-results"></div>
+        <div id="selectedGames" class="tags-container"></div>
+      </div>
+    </section>
+
+    <!-- Темы -->
+    <section class="form-section">
+      <div class="section-header">
+        <h2>Тематика</h2>
+        <button type="button" class="btn-small" onclick="openModal('themeModal')">+ Новая тема</button>
+      </div>
+      <div class="selection-area">
+        <input type="text" placeholder="Поиск темы..." oninput="searchThemes(this.value)">
+        <div id="themeResults" class="search-results"></div>
+        <div id="selectedThemes" class="tags-container"></div>
+      </div>
+    </section>
+
+    <!-- Кнопка создания -->
+    <button type="submit" class="btn-primary-large">Создать событие</button>
+  </form>
+</div>
+
+<!-- === МОДАЛЬНЫЕ ОКНА === -->
+
+<!-- Модалка Места -->
+<div id="placeModal" class="modal">
+  <div class="modal-content">
+    <h3>Новое место</h3>
+    <div class="form-group"><label>Название</label><input type="text" id="newPlaceName"></div>
+    <div class="form-group"><label>Город</label><input type="text" id="newPlaceCity"></div>
+    <div class="form-group"><label>Район</label><input type="text" id="newPlaceDistrict"></div>
+    <div class="form-group"><label>Адрес</label><input type="text" id="newPlaceAddress"></div>
+    <div class="modal-actions">
+      <button type="button" onclick="closeModal('placeModal')">Отмена</button>
+      <button type="button" class="btn-save" onclick="saveNewPlace()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- Модалка Игры (аналогично для остальных) -->
+<div id="gameModal" class="modal">
+  <div class="modal-content">
+    <h3>Новая игра</h3>
+    <div class="form-group"><label>Название</label><input type="text" id="newGameName"></div>
+    <div class="form-group"><label>Сложность</label>
+      <select id="newGameDiff">
+        <option value="Низкий">Низкий</option>
+        <option value="Средний">Средний</option>
+        <option value="Высокий">Высокий</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button type="button" onclick="closeModal('gameModal')">Отмена</button>
+      <button type="button" class="btn-save" onclick="saveNewGame()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- Модалка Темы -->
+<div id="themeModal" class="modal">
+  <div class="modal-content">
+    <h3>Новая тема</h3>
+    <div class="form-group"><label>Название</label><input type="text" id="newThemeName"></div>
+    <div class="modal-actions">
+      <button type="button" onclick="closeModal('themeModal')">Отмена</button>
+      <button type="button" class="btn-save" onclick="saveNewTheme()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/create-event.js"></script>
+</body>
+</html>
