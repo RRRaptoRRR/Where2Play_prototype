@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.nickname} + ' | Профиль'">Профиль</title>
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="/css/profile.css"> <!-- Используем те же стили профиля -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/public-profile.css"> <!-- Используем те же стили профиля -->
+
+
+</head>
+<body>
+
+<!-- Шапка -->
+<header class="main-header">
+    <a href="/profile" class="user-profile">
+        <div class="avatar-circle"><i class="fa-regular fa-user"></i></div>
+        <div class="user-info"><span th:text="${username}">Я</span></div>
+    </a>
+    <a href="/" style="margin-right: auto; margin-left: 20px; text-decoration: none; color: #333;">
+        <i class="fa-solid fa-house"></i> Меню
+    </a>
+</header>
+
+<div class="container">
+    <!-- Кнопка назад -->
+    <div class="back-btn-container">
+        <a href="javascript:history.back()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+    </div>
+
+    <div class="profile-header-text" th:text="'Профиль: ' + ${user.nickname}">Профиль пользователя</div>
+
+    <!-- Карточка пользователя (READ ONLY) -->
+    <div class="profile-card">
+        <div class="profile-avatar-large">
+            <i class="fa-regular fa-user"></i>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">ФИО:</span>
+            <span class="info-value" th:text="${user.name}">Иванов Иван</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Никнейм:</span>
+            <span class="info-value" th:text="${user.nickname}">ivan_gamer</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Gmail:</span>
+            <span class="info-value" th:text="${user.gmail}">email@gmail.com</span>
+        </div>
+        <!-- Телефон часто скрывают в публичном профиле, но если надо - оставьте -->
+        <div class="info-row">
+            <span class="info-label">Телефон:</span>
+            <span class="info-value" th:text="${user.phone}">89990000000</span>
+        </div>
+
+        <!-- Кнопки действий -->
+        <div class="review-actions">
+            <button class="btn-review btn-review-player" onclick="openReviewModal('PLAYER')">
+                 Отзыв об игроке
+            </button>
+
+            <button th:if="${isOrganizer}" class="btn-review btn-review-org" onclick="openReviewModal('ORGANIZER')">
+                 Отзыв об организаторе
+            </button>
+        </div>
+    </div>
+
+    <!-- Аккордеон с отзывами (READ ONLY) -->
+    <div class="accordion">
+        <div class="accordion-item" th:if="${isOrganizer}">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span>Отзывы об организаторе</span>
+                <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="accordion-content">
+                <div th:if="${#lists.isEmpty(organizerReviews)}" style="color: #999; padding: 10px 0;">Нет отзывов</div>
+                <div th:each="review : ${organizerReviews}" class="review-item">
+                    <span th:text="${review.review}">Отзыв...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span>Отзывы об игроке</span>
+                <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="accordion-content">
+                <div th:if="${#lists.isEmpty(playerReviews)}" style="color: #999; padding: 10px 0;">Нет отзывов</div>
+                <div th:each="review : ${playerReviews}" class="review-item">
+                    <span th:text="${review.review}">Отзыв...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно отзыва -->
+<div id="reviewModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-title" id="modalTitle">Оставить отзыв</div>
+
+        <form th:action="@{/profile/{id}/review(id=${user.id})}" method="post">
+            <input type="hidden" id="reviewType" name="type">
+
+            <textarea name="text" placeholder="Напишите ваш отзыв здесь..." required></textarea>
+
+            <div class="modal-buttons">
+                <button type="button" class="btn-cancel" onclick="closeReviewModal()">Отмена</button>
+                <button type="submit" class="btn-save">Опубликовать</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Аккордеон
+    function toggleAccordion(header) {
+        header.parentElement.classList.toggle('active');
+    }
+
+    // Модальное окно
+    function openReviewModal(type) {
+        document.getElementById('reviewType').value = type;
+        const title = type === 'PLAYER' ? 'Отзыв об игроке' : 'Отзыв об организаторе';
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('reviewModal').style.display = 'flex';
+    }
+
+    function closeReviewModal() {
+        document.getElementById('reviewModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('reviewModal');
+        if (event.target === modal) {
+            closeReviewModal();
+        }
+    }
+</script>
+
+</body>
+</html>

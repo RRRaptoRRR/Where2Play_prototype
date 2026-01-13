@@ -1,0 +1,58 @@
+/* Доп стили для кнопок отзывов */
+.review-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-review {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    color: white;
+    transition: opacity 0.2s;
+}
+
+.btn-review-player {
+    background-color: #3498db;
+}
+
+.btn-review-org {
+    background-color: #9b59b6;
+}
+
+.btn-review:hover { opacity: 0.9; }
+
+/* Стили модального окна (дублируем, если они не в profile.css) */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+}
+
+textarea {
+    width: 100%;
+    height: 120px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: vertical;
+    font-family: inherit;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}

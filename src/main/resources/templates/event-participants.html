@@ -53,10 +53,9 @@
             <td class="counter-col" th:text="${stat.count}">1</td>
             <td th:text="${player.name}">Петр Петров</td>
             <td>
-                <span class="profile-link-placeholder">Перейти в профиль</span>
-                <!-- В будущем заменим на:
-                     <a th:href="@{/profile/{id}(id=${player.userId})}">Перейти</a>
-                -->
+                <a th:href="@{/profile/{id}(id=${player.userId})}" style="color: #3498db; text-decoration: none;">
+                    Перейти в профиль
+                </a>
             </td>
         </tr>
         </tbody>
