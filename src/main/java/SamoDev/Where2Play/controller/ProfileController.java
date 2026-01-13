@@ -25,7 +25,7 @@ public class ProfileController {
         User user = userProfileService.getCurrentUser(currentUsername);
 
         model.addAttribute("user", user);
-        model.addAttribute("username", user.getName()); // Для хедера
+        model.addAttribute("username", user.getNickname()); // Для хедера
         model.addAttribute("organizerReviews", userProfileService.getOrganizerReviews(user));
         model.addAttribute("playerReviews", userProfileService.getPlayerReviews(user));
         model.addAttribute("isOrganizer", user.getOrganizer() != null);

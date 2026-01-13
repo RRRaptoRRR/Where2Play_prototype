@@ -3,24 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>Главное меню | Where2Play</title>
-  <!-- Подключаем тот же CSS, но можно создать отдельный menu.css -->
   <link rel="stylesheet" href="/css/menu.css">
-  <!-- Подключаем FontAwesome для иконок (календарь, плюс, список) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-<!-- Хедер с профилем -->
 <header class="main-header">
-  <div class="user-profile">
+  <!-- Ссылка на профиль -->
+  <a href="/profile" class="user-profile" title="Перейти в профиль">
     <div class="avatar-circle">
       <i class="fa-regular fa-user"></i>
     </div>
     <div class="user-info">
+      <!-- Выводим имя пользователя -->
       <span class="user-name" th:text="${username} ?: 'Гость'">Иван Иванов</span>
-      <!-- Можно добавить роль или статус -->
     </div>
-  </div>
+  </a>
+
   <form th:action="@{/logout}" method="post" class="logout-form">
     <button type="submit" class="btn-logout">
       <i class="fa-solid fa-arrow-right-from-bracket"></i> Выход
@@ -32,7 +31,7 @@
   <h1 class="menu-title">Главное меню</h1>
 
   <div class="menu-buttons">
-    <!-- Кнопка "Создать игру" -->
+    <!-- Создать мероприятие -->
     <a th:href="@{/create}" class="menu-card card-create">
       <div class="icon-circle">
         <i class="fa-solid fa-plus"></i>
@@ -40,7 +39,7 @@
       <span class="card-text">Создать мероприятие</span>
     </a>
 
-    <!-- Кнопка "Записаться на игру" (Ведет на таблицу ивентов) -->
+    <!-- Записаться на мероприятие -->
     <a th:href="@{/events}" class="menu-card card-join">
       <div class="icon-circle">
         <i class="fa-solid fa-list-ul"></i>
@@ -48,7 +47,7 @@
       <span class="card-text">Записаться на мероприятие</span>
     </a>
 
-    <!-- Кнопка "Календарь игр" -->
+    <!-- Календарь -->
     <a href="#" class="menu-card card-calendar">
       <div class="icon-circle">
         <i class="fa-regular fa-calendar"></i>
