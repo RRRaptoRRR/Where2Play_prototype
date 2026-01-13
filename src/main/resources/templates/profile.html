@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль | Where2Play</title>
+    <!-- Подключаем FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/profile.css">
+
+</head>
+<body>
+
+<!-- 1. Хедер (как в главном меню) -->
+<header class="main-header">
+    <a href="/profile" class="user-profile" title="Перейти в профиль">
+        <div class="avatar-circle">
+            <i class="fa-regular fa-user"></i>
+        </div>
+        <div class="user-info">
+            <span class="user-name" th:text="${username} ?: 'Гость'">Иван Иванов</span>
+        </div>
+    </a>
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <button type="submit" class="btn-logout">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Выход
+        </button>
+    </form>
+</header>
+
+<div class="container">
+    <!-- 2. Кнопка Назад (ниже хедера) -->
+    <div class="back-btn-container">
+        <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+    </div>
+
+    <div class="profile-header-text">Ваш профиль</div>
+
+    <!-- 3. Карточка пользователя -->
+    <div class="profile-card">
+        <div class="profile-avatar-large">
+            <i class="fa-regular fa-user"></i>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">ФИО:</span>
+            <span class="info-value" th:text="${user.name}">Иванов Иван Иванович</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Никнейм:</span>
+            <span class="info-value" th:text="${user.nickname}">ivan_gamer</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Gmail:</span>
+            <span class="info-value" th:text="${user.gmail}">example@gmail.com</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Телефон:</span>
+            <span class="info-value" th:text="${user.phone}">8(123)456-78-90</span>
+        </div>
+
+        <!-- Кнопка Редактировать -->
+        <button class="btn-edit" onclick="openModal()">Редактировать</button>
+    </div>
+
+    <!-- 4. Аккордеон с отзывами -->
+    <div class="accordion">
+
+        <!-- Отзывы об организаторе (показываем, если user.organizer != null) -->
+        <div class="accordion-item" th:if="${isOrganizer}">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span>Отзывы обо мне как об организаторе</span>
+                <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="accordion-content">
+                <div th:if="${#lists.isEmpty(organizerReviews)}" style="color: #999; padding: 10px 0;">
+                    Отзывов пока нет
+                </div>
+                <div th:each="review : ${organizerReviews}" class="review-item">
+                    <span th:text="${review.review}">Хорошая организация!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Отзывы об игроке -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span>Отзывы обо мне как об игроке</span>
+                <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="accordion-content">
+                <div th:if="${#lists.isEmpty(playerReviews)}" style="color: #999; padding: 10px 0;">
+                    Отзывов пока нет
+                </div>
+                <div th:each="review : ${playerReviews}" class="review-item">
+                    <span th:text="${review.review}">Отличный игрок!</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- 5. Модальное окно Редактирования -->
+<div id="editModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-title">Редактирование профиля</div>
+
+        <form th:action="@{/profile/update}" method="post">
+            <div class="form-group">
+                <label for="nameInput">ФИО</label>
+                <input type="text" id="nameInput" name="name" th:value="${user.name}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nickInput">Никнейм</label>
+                <input type="text" id="nickInput" name="nickname" th:value="${user.nickname}">
+            </div>
+
+            <div class="form-group">
+                <label for="phoneInput">Телефон</label>
+                <input type="text" id="phoneInput" name="phone" th:value="${user.phone}">
+            </div>
+
+            <!-- Gmail часто делают Read-only, так как это логин -->
+            <div class="form-group">
+                <label style="color: #999;">Gmail (не изменяется)</label>
+                <input type="text" th:value="${user.gmail}" disabled style="background: #eee; color: #777;">
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="btn-cancel" onclick="closeModal()">Отмена</button>
+                <button type="submit" class="btn-save">Сохранить</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Логика аккордеона
+    function toggleAccordion(header) {
+        const item = header.parentElement;
+        item.classList.toggle('active');
+    }
+
+    // Логика модального окна
+    function openModal() {
+        document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('editModal').style.display = 'none';
+    }
+
+    // Закрытие по клику вне окна
+    window.onclick = function(event) {
+        const modal = document.getElementById('editModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+</script>
+
+</body>
+</html>

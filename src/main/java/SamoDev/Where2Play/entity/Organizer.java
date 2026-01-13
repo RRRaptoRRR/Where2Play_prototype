@@ -2,7 +2,6 @@ package SamoDev.Where2Play.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.List;
 
 @Entity
@@ -12,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Organizer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -20,6 +20,7 @@ public class Organizer {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    @OneToMany(mappedBy = "organizer")
+    // Связь 1:N с отзывами об организаторе
+    @OneToMany(mappedBy = "organizer", fetch = FetchType.LAZY)
     private List<OrganizerReview> reviews;
 }
