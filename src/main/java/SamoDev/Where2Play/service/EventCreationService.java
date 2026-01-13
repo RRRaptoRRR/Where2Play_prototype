@@ -25,6 +25,7 @@ public class EventCreationService {
 
     @Transactional
     public void createEvent(EventCreationDto dto) {
+        System.out.println("Start creating event: " + dto);
         // 1. Определяем Организатора (текущий пользователь)
         String currentLogin = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userDao.findByLogin(currentLogin)
@@ -93,7 +94,7 @@ public class EventCreationService {
         event.setData(dto.getDate());
         event.setMaxPlayers(dto.getMaxPlayers());
         event.setNowPlayers(0); // Изначально 0 (или 1, если орг играет)
-        event.setStatus(EventStatus.ACTIVE);
+        event.setStatus(EventStatus.active);
 
         event.setOrganizer(organizer);
         event.setPlace(place);
@@ -102,6 +103,7 @@ public class EventCreationService {
         event.setThemes(themes);
         // event.setRules(...) - аналогично
 
+        System.out.println("Saving event...");
         eventDao.save(event);
     }
 }

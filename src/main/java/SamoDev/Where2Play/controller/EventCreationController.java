@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/events/create")
+@RequestMapping("/create")
 public class EventCreationController {
 
     @Autowired
@@ -26,6 +26,7 @@ public class EventCreationController {
             eventCreationService.createEvent(dto);
             return ResponseEntity.ok().body("Событие успешно создано");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Ошибка: " + e.getMessage());
         }
     }

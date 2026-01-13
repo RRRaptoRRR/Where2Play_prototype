@@ -9,6 +9,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Autowired
-    private CustomUserDetailsService userDetailsService; // Инжектим ваш сервис
+    private CustomUserDetailsService userDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -27,7 +28,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService) {
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -42,16 +43,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // ОТКЛЮЧАЕМ CSRF для работы AJAX запросов
+                .csrf(AbstractHttpConfigurer::disable)
+
                 .authorizeHttpRequests((requests) -> requests
                         // Разрешаем статику и страницы входа/регистрации
                         .requestMatchers("/css/**", "/images/**", "/js/**", "/auth/**", "/register").permitAll()
+                        // Разрешаем API и создание событий для авторизованных
+                        .requestMatchers("/create", "/api/search/**").authenticated()
                         // Все остальное требует входа
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/auth/login") // Наша кастомная страница
-                        .loginProcessingUrl("/perform_login") // Куда отправлять форму
-                        .defaultSuccessUrl("/", true) // Куда перенаправлять после успеха
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/perform_login")
+                        .defaultSuccessUrl("/", true)
                         .failureUrl("/auth/login?error=true")
                         .permitAll()
                 )
@@ -60,6 +66,7 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/auth/login?logout=true")
                         .permitAll()
                 )
+                // Фильтр авто-логина (уберите перед продакшеном)
                 .addFilterBefore(new AutoLoginFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

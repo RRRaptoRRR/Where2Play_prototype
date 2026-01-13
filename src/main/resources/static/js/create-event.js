@@ -305,7 +305,7 @@ async function handleFormSubmit(e) {
     console.log("Отправка DTO:", dto);
 
     try {
-        const response = await fetch('/events/create', {
+        const response = await fetch('/create', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dto)

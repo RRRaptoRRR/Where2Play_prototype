@@ -39,7 +39,7 @@ public class Event {
     private Integer nowPlayers = 1;
 
     @Enumerated(EnumType.STRING)
-    private EventStatus status = EventStatus.ACTIVE;
+    private EventStatus status = EventStatus.active;
 
     // Связь с участниками (events_to_players)
     @ManyToMany
