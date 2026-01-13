@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Мой Календарь</title>
+  <link rel="stylesheet" href="/css/menu.css">
+  <link rel="stylesheet" href="/css/events.css">
+  <link rel="stylesheet" href="/css/calendar.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Доп стили для статусов */
+    .status-cancelled { color: #e74c3c; font-weight: bold; }
+    .status-completed { color: #27ae60; font-weight: bold; }
+    .status-active { color: #2980b9; }
+
+    /* Стили для полной таблицы в аккордеоне */
+    .accordion-content .events-table th,
+    .accordion-content .events-table td {
+      font-size: 13px; /* Чуть меньше шрифт, чтоб влезало */
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="main-header">
+  <a href="/profile" class="user-profile">
+    <div class="avatar-circle"><i class="fa-regular fa-user"></i></div>
+    <div class="user-info"><span th:text="${username}">Профиль</span></div>
+  </a>
+  <a href="/" style="margin-right: auto; margin-left: 20px; text-decoration: none; color: #333;">
+    <i class="fa-solid fa-house"></i> В меню
+  </a>
+</header>
+
+<div class="calendar-container">
+  <div class="back-link-wrap">
+    <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Назад</a>
+  </div>
+
+  <h2 style="text-align: center;">Календарь</h2>
+
+  <!-- 1. Организованные мной -->
+  <div class="accordion-item">
+    <button class="accordion-btn">
+      Игры, организованные мной <i class="fa-solid fa-chevron-down"></i>
+    </button>
+    <div class="accordion-content">
+      <div class="table-responsive">
+        <table class="events-table">
+          <thead>
+          <tr>
+            <th>Название</th>
+            <th>Дата</th>
+            <th>Описание</th>
+            <th>Темы</th>
+            <th>Правила</th>
+            <th>Город / Район</th>
+            <th>Адрес</th>
+            <th>Игры</th>
+            <th>Участники</th>
+            <th>Действия</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="event : ${organizedEvents}">
+            <td th:text="${event.eventTitle}">Название</td>
+            <td th:text="${#temporals.format(event.eventDate, 'dd.MM.yyyy HH:mm')}">Дата</td>
+            <td th:text="${event.eventDescription}">Описание</td>
+            <td th:text="${event.topicsList}">Темы</td>
+            <td th:text="${event.rulesList}">Правила</td>
+            <td>
+              <div th:text="${event.city}">Город</div>
+              <div th:text="${event.district}" style="color: #777; font-size: 0.9em;">Район</div>
+            </td>
+            <td th:text="${event.address}">Адрес</td>
+            <td th:text="${event.gamesList}">Игры</td>
+            <td th:text="${event.currentPlayers} + ' / ' + ${event.maxPlayers}">0/0</td>
+            <td>
+              <a th:href="@{/events/{id}/participants(id=${event.eventId})}" class="btn-details">Подробнее</a>
+              <form th:action="@{/events/{id}/cancel(id=${event.eventId})}" method="post" style="display:inline;" onsubmit="return confirm('Вы уверены, что хотите отменить мероприятие?');">
+                <button type="submit" class="btn-cancel-event">Удалить</button>
+              </form>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(organizedEvents)}"><td colspan="10" style="text-align:center;">Нет игр</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Я записан -->
+  <div class="accordion-item">
+    <button class="accordion-btn">
+      Игры, на которые я записался <i class="fa-solid fa-chevron-down"></i>
+    </button>
+    <div class="accordion-content">
+      <div class="table-responsive">
+        <table class="events-table">
+          <thead>
+          <tr>
+            <th>Название</th>
+            <th>Организатор</th>
+            <th>Дата</th>
+            <th>Описание</th>
+            <th>Темы</th>
+            <th>Город / Район</th>
+            <th>Игры</th>
+            <th>Участники</th>
+            <th>Действия</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="event : ${participatingEvents}">
+            <td th:text="${event.eventTitle}">Название</td>
+            <td th:text="${event.organizerName}">Орг</td>
+            <td th:text="${#temporals.format(event.eventDate, 'dd.MM.yyyy HH:mm')}">Дата</td>
+            <td th:text="${event.eventDescription}">Описание</td>
+            <td th:text="${event.topicsList}">Темы</td>
+            <td>
+              <div th:text="${event.city}">Город</div>
+              <div th:text="${event.district}" style="color: #777; font-size: 0.9em;">Район</div>
+            </td>
+            <td th:text="${event.gamesList}">Игры</td>
+            <td class="current-players" th:text="${event.currentPlayers} + ' / ' + ${event.maxPlayers}">0/0</td>
+            <td>
+              <a th:href="@{/events/{id}/participants(id=${event.eventId})}" class="btn-details">Подробнее</a>
+              <!-- Кнопка Отписаться (JS) -->
+              <button class="btn-join btn-leave"
+                      th:onclick="'leaveEvent(' + ${event.eventId} + ', this)'">Отписаться</button>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(participatingEvents)}"><td colspan="9" style="text-align:center;">Нет записей</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Прошедшие / Отмененные -->
+  <div class="accordion-item">
+    <button class="accordion-btn">
+      Прошедшие мероприятия <i class="fa-solid fa-chevron-down"></i>
+    </button>
+    <div class="accordion-content">
+      <div class="table-responsive">
+        <table class="events-table">
+          <thead>
+          <tr>
+            <th>Название</th>
+            <th>Роль</th>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th>Описание</th>
+            <th>Действия</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="event : ${pastEvents}" style="background-color: #fafafa;">
+            <td th:text="${event.eventTitle}">Название</td>
+            <td>
+              <span th:text="${event.roleName}" style="font-weight: 500; color: #555;">Участник</span>
+            </td>
+            <td th:text="${#temporals.format(event.eventDate, 'dd.MM.yyyy')}">Дата</td>
+            <td>
+              <!-- Статус с цветом -->
+              <span th:if="${event.status == 'cancelled'}" class="status-cancelled">Отменено</span>
+              <span th:if="${event.status == 'completed'}" class="status-completed">Завершено</span>
+              <span th:if="${event.status == 'active'}" class="status-active">Активно (в прошлом)</span>
+            </td>
+            <td th:text="${event.eventDescription}">Описание</td>
+            <td>
+              <a th:href="@{/events/{id}/participants(id=${event.eventId})}" class="btn-details">Участники</a>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(pastEvents)}"><td colspan="6" style="text-align:center;">Архив пуст</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/calendar.js"></script>
+<!-- Подключаем events.js чтобы работала функция leaveEvent -->
+<script src="/js/events.js"></script>
+</body>
+</html>

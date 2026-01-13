@@ -1,0 +1,92 @@
+.calendar-container {
+    max-width: 98%; /* Было 800px */
+    width: 98%;     /* Заставляем занять всю ширину */
+    margin: 20px auto;
+    padding: 0 10px;
+}
+
+/* Опционально: уменьшаем шрифт в ячейках, если колонок много */
+.accordion-content .events-table th,
+.accordion-content .events-table td {
+    font-size: 13px;
+    padding: 8px 5px;
+    white-space: normal; /* Разрешаем перенос текста */
+}
+
+
+.accordion-item {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    overflow: hidden;
+}
+
+.accordion-btn {
+    width: 100%;
+    padding: 15px;
+    background: white;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid transparent;
+    transition: background 0.2s;
+}
+
+.accordion-btn:hover {
+    background: #f8f9fa;
+}
+
+.accordion-btn.active {
+    border-bottom: 1px solid #ddd;
+    background: #f1f3f4;
+}
+
+.accordion-btn i {
+    transition: transform 0.3s;
+}
+
+.accordion-btn.active i {
+    transform: rotate(180deg);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: #fff;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Кнопка удаления */
+.btn-cancel-event {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-top: 5px;
+    width: 100%;
+}
+.btn-cancel-event:hover {
+    background-color: #c0392b;
+}
+
+.back-link-wrap {
+    margin-bottom: 15px;
+}
+.back-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}

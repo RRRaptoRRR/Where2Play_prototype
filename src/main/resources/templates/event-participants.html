@@ -20,9 +20,10 @@
 </header>
 
 <div class="container">
-    <a href="/events" class="back-link">
-        <i class="fa-solid fa-arrow-left"></i> Вернуться к списку мероприятий
+    <a th:href="${backUrl}" class="back-link">
+        <i class="fa-solid fa-arrow-left"></i> Вернуться к списку
     </a>
+
 
     <h2>Участники мероприятия: <span th:text="${eventName}">Название</span></h2>
 

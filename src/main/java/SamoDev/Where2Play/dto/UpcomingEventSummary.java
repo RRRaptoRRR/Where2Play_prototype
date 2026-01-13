@@ -16,4 +16,6 @@ public interface UpcomingEventSummary {
     String getGamesList();
     Integer getCurrentPlayers();
     Integer getMaxPlayers();
+    String getStatus();
+    String getRoleName();
 }

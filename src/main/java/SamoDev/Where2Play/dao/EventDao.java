@@ -58,4 +58,71 @@ public interface EventDao extends JpaRepository<Event, Integer> {
     @Query("SELECT e.name FROM Event e WHERE e.id = :eventId")
     String findEventNameById(@Param("eventId") Integer eventId);
 
+    // 1. Мероприятия, где я организатор (и активные)
+    @Query(value = """
+        SELECT * FROM get_upcoming_events() 
+        WHERE event_id IN (
+            SELECT e.id FROM events e 
+            JOIN organizers o ON e.organizer_id = o.id 
+            WHERE o.user_id = :userId AND e.status = 'active'
+        )
+    """, nativeQuery = true)
+    List<UpcomingEventSummary> findMyOrganizedEvents(@Param("userId") Integer userId);
+
+    // 2. Мероприятия, куда я записан как игрок (но не организатор)
+    @Query(value = """
+        SELECT * FROM get_upcoming_events()
+        WHERE event_id IN (
+            SELECT etp.event_id FROM events_to_players etp
+            WHERE etp.user_id = :userId
+        )
+        AND event_id NOT IN (
+            SELECT e.id FROM events e 
+            JOIN organizers o ON e.organizer_id = o.id 
+            WHERE o.user_id = :userId
+        )
+    """, nativeQuery = true)
+    List<UpcomingEventSummary> findMyParticipatingEvents(@Param("userId") Integer userId);
+
+    @Query(value = """
+        SELECT 
+            e.id AS event_id,
+            e.name AS event_title,
+            u.name AS organizer_name,
+            e.data AS event_date,
+            e.description AS event_description,
+            e.status AS status,   -- Добавили статус
+            CASE WHEN o.user_id = :userId THEN 'Организатор' ELSE 'Участник' END AS role_name, -- Добавили роль
+            -- остальные поля как в get_upcoming_events
+            COALESCE(STRING_AGG(DISTINCT t.name, ', '), 'Нет тем') AS topics_list,
+            COALESCE(STRING_AGG(DISTINCT r.description, '; '), 'Нет особых правил') AS rules_list,
+            p.city, p.district, p.address,
+            COALESCE(STRING_AGG(DISTINCT g.name, ', '), 'Игры не указаны') AS games_list,
+            e.now_players AS current_players,
+            e.max_players AS max_players
+        FROM events e
+        JOIN organizers o ON e.organizer_id = o.id
+        JOIN users u ON o.user_id = u.id
+        JOIN places p ON e.place_id = p.id
+        LEFT JOIN events_to_themes ett ON e.id = ett.event_id
+        LEFT JOIN themes t ON ett.theme_id = t.id
+        LEFT JOIN events_to_rules etr ON e.id = etr.event_id
+        LEFT JOIN rules r ON etr.rule_id = r.id
+        LEFT JOIN events_to_games etg ON e.id = etg.event_id
+        LEFT JOIN games g ON etg.game_id = g.id
+        LEFT JOIN events_to_players etp ON e.id = etp.event_id
+        WHERE (etp.user_id = :userId OR o.user_id = :userId)
+        AND (e.status IN ('completed', 'cancelled') OR e.data < NOW())
+        GROUP BY e.id, e.name, u.name, e.data, e.description, p.city, p.district, p.address, e.now_players, e.max_players, e.status, o.user_id
+        ORDER BY e.data DESC
+    """, nativeQuery = true)
+    List<UpcomingEventSummary> findMyPastEvents(@Param("userId") Integer userId);
+
+    @Modifying
+    @Query(value = "INSERT INTO events_to_players(event_id, user_id) VALUES (:eventId, :userId)", nativeQuery = true)
+    void addParticipant(@Param("eventId") Integer eventId, @Param("userId") Integer userId);
+
+
+
+
 }

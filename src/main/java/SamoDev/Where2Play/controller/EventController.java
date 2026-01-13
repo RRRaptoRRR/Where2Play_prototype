@@ -3,6 +3,7 @@ package SamoDev.Where2Play.controller;
 import SamoDev.Where2Play.dto.ParticipantSummary;
 import SamoDev.Where2Play.dto.UpcomingEventSummary;
 import SamoDev.Where2Play.service.EventService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,12 +23,13 @@ public class EventController {
 
     @GetMapping("/events")
     public String showEvents(Model model, Authentication authentication) {
-        List<UpcomingEventSummary> events = eventService.getAllEvents();
+        String username = (authentication != null) ? authentication.getName() : null;
+
+        List<UpcomingEventSummary> events = eventService.getAllEvents(username);
 
         // Создаем карту статусов участия для текущего пользователя
         Map<Integer, Boolean> participationMap = new HashMap<>();
         if (authentication != null) {
-            String username = authentication.getName();
             for (UpcomingEventSummary event : events) {
                 boolean isRegistered = eventService.isUserRegistered(event.getEventId(), username);
                 participationMap.put(event.getEventId(), isRegistered);
@@ -65,7 +67,7 @@ public class EventController {
     }
 
     @GetMapping("/events/{id}/participants")
-    public String showEventParticipants(@PathVariable("id") Integer eventId, Model model, Authentication authentication) {
+    public String showEventParticipants(@PathVariable("id") Integer eventId, Model model, Authentication authentication, HttpServletRequest request) {
         String eventName = eventService.getEventName(eventId);
         ParticipantSummary organizer = eventService.getEventOrganizer(eventId);
         List<ParticipantSummary> participants = eventService.getEventParticipants(eventId);
@@ -80,7 +82,15 @@ public class EventController {
             // model.addAttribute("username", ...);
         }
 
+        String referer = request.getHeader("Referer");
+        String backUrl = "/events";
+        if (referer != null && referer.contains("/calendar")) {
+            backUrl = "/calendar";
+        }
+        model.addAttribute("backUrl", backUrl);
+
         return "event-participants";
+
     }
 
 }
