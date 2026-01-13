@@ -1,5 +1,7 @@
 package SamoDev.Where2Play.dao;
 
+import SamoDev.Where2Play.dto.ParticipantDto;
+import SamoDev.Where2Play.dto.ParticipantSummary;
 import SamoDev.Where2Play.dto.UpcomingEventSummary;
 import SamoDev.Where2Play.entity.Event; // Убедитесь, что Entity Event существует
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,4 +34,28 @@ public interface EventDao extends JpaRepository<Event, Integer> {
     // Проверка, является ли пользователь организатором
     @Query(value = "SELECT COUNT(*) > 0 FROM events e JOIN organizers o ON e.organizer_id = o.id WHERE e.id = :eventId AND o.user_id = :userId", nativeQuery = true)
     boolean isUserOrganizer(@Param("eventId") Integer eventId, @Param("userId") Integer userId);
+
+    @Query(value = """
+        SELECT u.id as userId, u.name as name
+        FROM users u 
+        JOIN organizers o ON u.id = o.user_id 
+        JOIN events e ON o.id = e.organizer_id
+        WHERE e.id = :eventId
+    """, nativeQuery = true)
+    ParticipantSummary findOrganizerSummary(@Param("eventId") Integer eventId);
+
+    @Query(value = """
+        SELECT u.id as userId, u.name as name
+        FROM users u 
+        JOIN events_to_players etp ON u.id = etp.user_id 
+        WHERE etp.event_id = :eventId
+        ORDER BY etp.id ASC  -- Сортировка по порядку добавления
+    """, nativeQuery = true)
+    List<ParticipantSummary> findParticipantsSummary(@Param("eventId") Integer eventId);
+
+
+    // Чтобы получить название ивента для заголовка
+    @Query("SELECT e.name FROM Event e WHERE e.id = :eventId")
+    String findEventNameById(@Param("eventId") Integer eventId);
+
 }

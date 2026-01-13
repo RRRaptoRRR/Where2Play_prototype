@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Участники мероприятия</title>
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="/css/event-participants.css"></head>
+<body>
+
+<!-- Шапка (как везде) -->
+<header class="main-header">
+    <a href="/profile" class="user-profile">
+        <div class="avatar-circle"><i class="fa-regular fa-user"></i></div>
+        <!-- Заглушка, если контроллер не передаст username, или добавьте логику в контроллер -->
+        <div class="user-info"><span>Профиль</span></div>
+    </a>
+</header>
+
+<div class="container">
+    <a href="/events" class="back-link">
+        <i class="fa-solid fa-arrow-left"></i> Вернуться к списку мероприятий
+    </a>
+
+    <h2>Участники мероприятия: <span th:text="${eventName}">Название</span></h2>
+
+    <div class="organizer-section">
+        <div class="organizer-info">
+            <span class="organizer-label">Организатор</span>
+            <span class="organizer-name" th:text="${organizer.name}">Иван Иванов</span>
+        </div>
+    </div>
+
+    <!-- Таблица участников -->
+    <h3>Список игроков</h3>
+
+    <div th:if="${#lists.isEmpty(participants)}" style="text-align: center; color: #7f8c8d; padding: 20px;">
+        На это мероприятие пока никто не записался.
+    </div>
+
+    <table th:unless="${#lists.isEmpty(participants)}">
+        <thead>
+        <tr>
+            <th class="counter-col">#</th>
+            <th>ФИО Участника</th>
+            <th>Профиль</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="player, stat : ${participants}">
+            <td class="counter-col" th:text="${stat.count}">1</td>
+            <td th:text="${player.name}">Петр Петров</td>
+            <td>
+                <span class="profile-link-placeholder">Перейти в профиль</span>
+                <!-- В будущем заменим на:
+                     <a th:href="@{/profile/{id}(id=${player.userId})}">Перейти</a>
+                -->
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

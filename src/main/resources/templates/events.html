@@ -87,7 +87,7 @@
                     Записаться
                 </button>
 
-                <a href="#" class="btn-details" onclick="alert('Страница участников в разработке'); return false;">Подробнее</a>
+                <a th:href="@{/events/{id}/participants(id=${event.eventId})}" class="btn-details">Подробнее</a>
             </td>
         </tr>
         </tbody>

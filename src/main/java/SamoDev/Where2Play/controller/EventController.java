@@ -1,5 +1,6 @@
 package SamoDev.Where2Play.controller;
 
+import SamoDev.Where2Play.dto.ParticipantSummary;
 import SamoDev.Where2Play.dto.UpcomingEventSummary;
 import SamoDev.Where2Play.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -62,4 +63,24 @@ public class EventController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/events/{id}/participants")
+    public String showEventParticipants(@PathVariable("id") Integer eventId, Model model, Authentication authentication) {
+        String eventName = eventService.getEventName(eventId);
+        ParticipantSummary organizer = eventService.getEventOrganizer(eventId);
+        List<ParticipantSummary> participants = eventService.getEventParticipants(eventId);
+
+        model.addAttribute("eventName", eventName);
+        model.addAttribute("organizer", organizer);
+        model.addAttribute("participants", participants);
+
+        // Для хедера
+        if (authentication != null) {
+            // Логика получения никнейма как раньше
+            // model.addAttribute("username", ...);
+        }
+
+        return "event-participants";
+    }
+
 }

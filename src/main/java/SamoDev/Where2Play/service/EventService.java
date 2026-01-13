@@ -2,6 +2,7 @@ package SamoDev.Where2Play.service;
 
 import SamoDev.Where2Play.dao.EventDao;
 import SamoDev.Where2Play.dao.UserDao;
+import SamoDev.Where2Play.dto.ParticipantSummary;
 import SamoDev.Where2Play.dto.UpcomingEventSummary;
 import SamoDev.Where2Play.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -51,4 +52,25 @@ public class EventService {
                 .or(() -> userDao.findByGmail(username))
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+    @Transactional(readOnly = true)
+    public ParticipantSummary getEventOrganizer(Integer eventId) {
+        return eventDao.findOrganizerSummary(eventId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ParticipantSummary> getEventParticipants(Integer eventId) {
+        // Получаем всех участников
+        List<ParticipantSummary> participants = eventDao.findParticipantsSummary(eventId);
+
+        // Если нужно исключить организатора из общей таблицы (чтобы не дублировался),
+        // можно отфильтровать здесь. Но обычно показывают всех.
+        return participants;
+    }
+
+    @Transactional(readOnly = true)
+    public String getEventName(Integer eventId) {
+        return eventDao.findEventNameById(eventId);
+    }
+
 }
