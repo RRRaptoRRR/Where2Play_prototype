@@ -52,7 +52,6 @@
           <button type="button" onclick="removePlace()"><i class="fa-solid fa-xmark"></i></button>
         </div>
       </div>
-      <!-- Скрытые поля для выбранного места -->
       <input type="hidden" id="placeId" name="placeId">
     </section>
 
@@ -82,14 +81,29 @@
       </div>
     </section>
 
-    <!-- Кнопка создания -->
+    <!-- Правила -->
+    <section class="form-section">
+      <div class="section-header">
+        <h2>Правила мероприятия</h2>
+        <button type="button" class="btn-small" onclick="openModal('ruleModal')">+ Создать правило</button>
+      </div>
+      <div class="selection-area">
+        <!-- ПОЛЕ ПОИСКА -->
+        <input type="text" placeholder="Поиск правила..." oninput="searchRules(this.value)">
+        <div id="ruleResults" class="search-results"></div>
+
+        <div id="selectedRules" class="tags-container"></div>
+      </div>
+    </section>
+
+
     <button type="submit" class="btn-primary-large">Создать событие</button>
   </form>
 </div>
 
 <!-- === МОДАЛЬНЫЕ ОКНА === -->
 
-<!-- Модалка Места -->
+<!-- 1. Место -->
 <div id="placeModal" class="modal">
   <div class="modal-content">
     <h3>Новое место</h3>
@@ -97,6 +111,8 @@
     <div class="form-group"><label>Город</label><input type="text" id="newPlaceCity"></div>
     <div class="form-group"><label>Район</label><input type="text" id="newPlaceDistrict"></div>
     <div class="form-group"><label>Адрес</label><input type="text" id="newPlaceAddress"></div>
+    <div class="form-group"><label>Описание</label><textarea id="newPlaceDesc"></textarea></div>
+    <div class="form-group"><label>Доп. информация</label><input type="text" id="newPlaceInfo"></div>
     <div class="modal-actions">
       <button type="button" onclick="closeModal('placeModal')">Отмена</button>
       <button type="button" class="btn-save" onclick="saveNewPlace()">Сохранить</button>
@@ -104,11 +120,18 @@
   </div>
 </div>
 
-<!-- Модалка Игры (аналогично для остальных) -->
+<!-- 2. Игра (Сложная форма) -->
 <div id="gameModal" class="modal">
-  <div class="modal-content">
+  <div class="modal-content large-modal"> <!-- large-modal стилизуйте шириной побольше -->
     <h3>Новая игра</h3>
     <div class="form-group"><label>Название</label><input type="text" id="newGameName"></div>
+    <div class="form-group"><label>Описание</label><textarea id="newGameDesc"></textarea></div>
+
+    <div class="form-row">
+      <div class="form-group"><label>Макс. игроков</label><input type="number" id="newGameMax" min="1"></div>
+      <div class="form-group"><label>Длительность (мин)</label><input type="number" id="newGameTime" min="5"></div>
+    </div>
+
     <div class="form-group"><label>Сложность</label>
       <select id="newGameDiff">
         <option value="easy">Низкий</option>
@@ -116,21 +139,59 @@
         <option value="hard">Высокий</option>
       </select>
     </div>
+
+    <!-- Вложенный выбор жанров -->
+    <div class="form-section internal-section">
+      <div class="section-header">
+        <label>Жанры</label>
+        <button type="button" class="btn-tiny" onclick="openModal('genreModal')">+ Новый жанр</button>
+      </div>
+      <input type="text" placeholder="Поиск жанра..." oninput="searchGenres(this.value)">
+      <div id="genreResults" class="search-results"></div>
+      <div id="newGameSelectedGenres" class="tags-container"></div>
+    </div>
+
     <div class="modal-actions">
       <button type="button" onclick="closeModal('gameModal')">Отмена</button>
-      <button type="button" class="btn-save" onclick="saveNewGame()">Сохранить</button>
+      <button type="button" class="btn-save" onclick="saveNewGame()">Сохранить игру</button>
     </div>
   </div>
 </div>
 
-<!-- Модалка Темы -->
+<!-- 3. Тема -->
 <div id="themeModal" class="modal">
   <div class="modal-content">
     <h3>Новая тема</h3>
     <div class="form-group"><label>Название</label><input type="text" id="newThemeName"></div>
+    <div class="form-group"><label>Описание</label><textarea id="newThemeDesc"></textarea></div>
     <div class="modal-actions">
       <button type="button" onclick="closeModal('themeModal')">Отмена</button>
       <button type="button" class="btn-save" onclick="saveNewTheme()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Правило -->
+<div id="ruleModal" class="modal">
+  <div class="modal-content">
+    <h3>Новое правило</h3>
+    <div class="form-group"><label>Описание правила</label><textarea id="newRuleDesc" rows="4"></textarea></div>
+    <div class="modal-actions">
+      <button type="button" onclick="closeModal('ruleModal')">Отмена</button>
+      <button type="button" class="btn-save" onclick="saveNewRule()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- 5. Жанр (Вложенная модалка) -->
+<div id="genreModal" class="modal" style="z-index: 2000;"> <!-- z-index выше, чем у игры -->
+  <div class="modal-content small-modal">
+    <h3>Новый жанр</h3>
+    <div class="form-group"><label>Название</label><input type="text" id="newGenreName"></div>
+    <div class="form-group"><label>Описание</label><textarea id="newGenreDesc"></textarea></div>
+    <div class="modal-actions">
+      <button type="button" onclick="closeModal('genreModal')">Отмена</button>
+      <button type="button" class="btn-save" onclick="saveNewGenre()">Добавить</button>
     </div>
   </div>
 </div>

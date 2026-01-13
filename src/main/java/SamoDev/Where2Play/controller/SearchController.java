@@ -1,11 +1,6 @@
 package SamoDev.Where2Play.controller;
 
-import SamoDev.Where2Play.dao.GameDao;
-import SamoDev.Where2Play.dao.PlaceDao;
-import SamoDev.Where2Play.dao.ThemeDao;
-import SamoDev.Where2Play.entity.Game;
-import SamoDev.Where2Play.entity.Place;
-import SamoDev.Where2Play.entity.Theme;
+import SamoDev.Where2Play.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +17,10 @@ public class SearchController {
 
     @Autowired private PlaceDao placeDao;
     @Autowired private GameDao gameDao;
+    @Autowired private GenreDao genreDao; // <--- Не забудьте добавить
+
     @Autowired private ThemeDao themeDao;
+    @Autowired private RuleDao ruleDao; // <--- ТЕПЕРЬ РАБОТАЕТ
 
     // DTO для ответа (чтобы не тянуть всю сущность с ID и связями)
     record SearchResult(Integer id, String name) {}
@@ -43,11 +41,29 @@ public class SearchController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/genres")
+    public List<SearchResult> searchGenres(@RequestParam String query) {
+        if (query.length() < 2) return Collections.emptyList();
+
+        return genreDao.findByNameContainingIgnoreCase(query).stream()
+                .map(g -> new SearchResult(g.getId(), g.getName()))
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("/themes")
     public List<SearchResult> searchThemes(@RequestParam String query) {
         if (query.length() < 2) return Collections.emptyList();
         return themeDao.findByNameContainingIgnoreCase(query).stream()
                 .map(t -> new SearchResult(t.getId(), t.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/rules")
+    public List<SearchResult> searchRules(@RequestParam String query) {
+        if (query.length() < 2) return Collections.emptyList();
+        // Возвращаем description как name для унификации SearchResult
+        return ruleDao.findByDescriptionContainingIgnoreCase(query).stream()
+                .map(r -> new SearchResult(r.getId(), r.getDescription()))
                 .collect(Collectors.toList());
     }
 }
