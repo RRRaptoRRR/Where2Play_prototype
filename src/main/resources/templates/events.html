@@ -2,81 +2,100 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Ближайшие события | Where2Play</title>
-    <!-- Исправлено имя файла стилей -->
+    <title>Предстоящие мероприятия</title>
+
+    <!-- Подключение CSS -->
+    <link rel="stylesheet" href="/css/menu.css">
     <link rel="stylesheet" href="/css/events.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-<div class="container">
-    <h1>Предстоящие мероприятия</h1>
+<!-- Шапка -->
+<header class="main-header">
+    <a href="/profile" class="user-profile">
+        <div class="avatar-circle"><i class="fa-regular fa-user"></i></div>
+        <div class="user-info"><span th:text="${username} ?: 'Гость'">Имя</span></div>
+    </a>
+    <a href="/" style="margin-right: auto; margin-left: 20px; text-decoration: none; color: #333; font-weight: bold;">
+        <i class="fa-solid fa-house"></i> В меню
+    </a>
+</header>
 
-    <table class="events-table">
+<h2 style="text-align: center; color: #2c3e50;">Предстоящие мероприятия</h2>
+
+<!-- Фильтры -->
+<div class="filter-container">
+    <input type="text" id="filterOrganizer" class="filter-input" placeholder="Организатор..." onkeyup="filterTable()">
+    <input type="date" id="filterDate" class="filter-input" onchange="filterTable()">
+    <input type="text" id="filterCity" class="filter-input" placeholder="Город" onkeyup="filterTable()">
+    <input type="text" id="filterDistrict" class="filter-input" placeholder="Район" onkeyup="filterTable()">
+
+
+    <div class="tags-input-container" onclick="document.getElementById('gameInput').focus()">
+        <input type="text" id="gameInput" class="tag-input" placeholder="Добавить игру (Enter)...">
+    </div>
+</div>
+
+<!-- Таблица -->
+<div class="table-container">
+    <table id="eventsTable">
         <thead>
         <tr>
-            <th>Название</th>
-            <th>Организатор</th>
-            <th>Дата</th>
+            <th onclick="sortTable(0)">Название ↕</th>
+            <th onclick="sortTable(1)">Организатор ↕</th>
+            <th onclick="sortTable(2)">Дата ↕</th>
             <th>Описание</th>
             <th>Темы</th>
             <th>Правила</th>
-            <th>Место проведения</th>
+            <th onclick="sortTable(6)">Город ↕</th>
+            <th>Район</th>
+            <th>Адрес</th>
             <th>Игры</th>
-            <th>Игроки</th>
+            <th>Участники</th>
+            <th>Действия</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="event : ${events}">
+        <tr th:each="event : ${events}" th:data-event-id="${event.eventId}">
             <td th:text="${event.eventTitle}">Название</td>
             <td th:text="${event.organizerName}">Организатор</td>
             <td th:text="${#temporals.format(event.eventDate, 'dd.MM.yyyy HH:mm')}">Дата</td>
             <td th:text="${event.eventDescription}">Описание</td>
-
+            <td th:text="${event.topicsList}">Темы</td>
+            <td th:text="${event.rulesList}">Правила</td>
+            <td th:text="${event.city}">Город</td>
+            <td th:text="${event.district}">Район</td>
+            <td th:text="${event.address}">Адрес</td>
+            <td th:text="${event.gamesList}">Игры</td>
             <td>
-                <div th:if="${event.topicsList != null}">
-                    <div th:each="topic : ${#strings.arraySplit(event.topicsList, ',')}">
-                        <a href="#" class="tag-link" th:text="${topic.trim()}">Тема</a>
-                    </div>
-                </div>
+                <span class="current-players" th:text="${event.currentPlayers}">0</span>
+                /
+                <span th:text="${event.maxPlayers}">0</span>
             </td>
-
             <td>
-                <div th:if="${event.rulesList != null}">
-                    <div th:each="rule : ${#strings.arraySplit(event.rulesList, ',')}">
-                        <a href="#" class="rule-link" th:text="${rule.trim()}">Правило</a>
-                    </div>
-                </div>
-            </td>
+                <!-- Кнопка меняется в зависимости от участия -->
+                <button th:if="${participationMap.get(event.eventId)}"
+                        class="btn-join btn-leave"
+                        th:onclick="'leaveEvent(' + ${event.eventId} + ', this)'">
+                    Отписаться
+                </button>
 
-            <td>
-                <div class="location-info">
-                    <a href="#" class="place-link" th:text="${event.city}">Город</a>
-                    <span th:if="${event.district != null}">,
-                        <a href="#" class="place-link" th:text="${event.district}">Район</a>
-                    </span>
-                    <br>
-                    <a href="#" class="address-link" th:text="${event.address}">Адрес</a>
-                </div>
-            </td>
+                <button th:unless="${participationMap.get(event.eventId)}"
+                        class="btn-join"
+                        th:onclick="'joinEvent(' + ${event.eventId} + ', this)'">
+                    Записаться
+                </button>
 
-            <td>
-                <div th:if="${event.gamesList != null}">
-                    <div th:each="game : ${#strings.arraySplit(event.gamesList, ',')}">
-                        <a href="#" class="game-link" th:text="${game.trim()}">Игра</a>
-                    </div>
-                </div>
-            </td>
-
-            <td>
-                <span th:text="${event.currentPlayers} + '/' + ${event.maxPlayers}"
-                      style="font-weight: bold;">0/0</span>
-                <br>
-                <button type="button" class="btn-details">Подробнее</button>
+                <a href="#" class="btn-details" onclick="alert('Страница участников в разработке'); return false;">Подробнее</a>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
+
+<!-- Подключение JS в конце body -->
+<script src="/js/events.js"></script>
 
 </body>
 </html>

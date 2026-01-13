@@ -1,91 +1,148 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
-    margin: 0;
-    padding: 20px;
-}
-
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
+/* --- Фильтры --- */
+.filter-container {
     background: white;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 1200px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
-h1 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 30px;
+.filter-input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    min-width: 150px;
 }
 
-.events-table {
-    width: 100%;
-    border-collapse: collapse;
+/* --- Теги игр --- */
+.tags-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: white;
+    min-width: 250px;
+    align-items: center;
+    cursor: text;
+}
+
+.tag {
+    background: #e1f5fe;
+    color: #0288d1;
+    padding: 3px 8px;
+    border-radius: 15px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.tag i {
+    cursor: pointer;
+}
+
+.tag-input {
+    border: none;
+    outline: none;
+    flex: 1;
+    min-width: 60px;
     font-size: 14px;
 }
 
-.events-table th, .events-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-    vertical-align: top;
+/* --- Таблица --- */
+.filter-container, .table-container {
+    max-width: 98%; /* Было 1200px или 1400px */
+    width: 98%;     /* Заставляет занять почти всю ширину экрана */
+    margin: 0 auto 20px auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.events-table th {
-    background-color: #009879;
-    color: #ffffff;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 0.5px;
+thead {
+    background-color: #009688; /* Основной цвет заголовка */
+    color: white;
 }
 
-.events-table tr:hover {
-    background-color: #f8f9fa;
+body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden; /* Чтобы не было гориз. скролла на body */
 }
 
-/* Ссылки */
-a {
-    color: #009879;
-    text-decoration: none;
-    border-bottom: 1px dashed transparent;
-    transition: all 0.2s;
+/* 3. Настройка ширины колонок (опционально, но полезно для широкой таблицы) */
+th, td {
+    padding: 10px; /* Чуть меньше отступы, чтобы влезло больше данных */
+    font-size: 14px;
+}
+th {
+    cursor: pointer; /* Указывает, что можно сортировать */
+    white-space: nowrap;
+}
+th:nth-child(4), td:nth-child(4) {
+    min-width: 200px;
+    max-width: 300px;
 }
 
-a:hover {
-    color: #007f65;
-    border-bottom: 1px dashed #007f65;
+/* Колонке с названием даем мин. ширину */
+th:nth-child(1), td:nth-child(1) {
+    min-width: 150px;
+}
+th:hover {
+    background-color: #00796b;
 }
 
-/* Стили для тегов и списков */
-.tag-link, .game-link, .rule-link {
-    display: inline-block;
-    margin-bottom: 2px;
+tr:hover {
+    background-color: #f9f9f9;
 }
 
-.location-info {
-    line-height: 1.5;
-}
-
-.address-link {
-    color: #666;
-    font-size: 0.95em;
-}
-
-/* Кнопка */
-.btn-details {
-    background-color: #3498db;
+/* --- Кнопки --- */
+.btn-join {
+    background-color: #27ae60;
     color: white;
     border: none;
     padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 8px;
-    font-size: 12px;
-    transition: background-color 0.2s;
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: 13px;
+    transition: background 0.2s;
+}
+
+.btn-join:hover {
+    background-color: #219150;
+}
+
+.btn-leave {
+    background-color: #e74c3c;
+}
+
+.btn-leave:hover {
+    background-color: #c0392b;
+}
+
+.btn-details {
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 13px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background 0.2s;
 }
 
 .btn-details:hover {

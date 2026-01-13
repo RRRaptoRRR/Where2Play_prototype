@@ -3,6 +3,7 @@ package SamoDev.Where2Play.dto;
 import java.time.LocalDateTime;
 
 public interface UpcomingEventSummary {
+    Integer getEventId(); // Добавили ID! (В SQL запросе должно быть 'e.id AS event_id')
     String getEventTitle();
     String getOrganizerName();
     LocalDateTime getEventDate();
