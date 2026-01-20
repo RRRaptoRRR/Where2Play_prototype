@@ -123,34 +123,3 @@ java -jar target/where2play-1.0.0.jar
 ```
 http://localhost:8080
 ```
-
-## 💻 Архитектура приложения
-
-Проект следует классической трёхслойной архитектуре:
-
-```
-Where2Play/
-├── src/main/java/
-│   ├── controller/          — обработка HTTP-запросов, API endpoints
-│   ├── service/             — бизнес-логика приложения
-│   ├── repository/          — работа с БД через Spring Data JPA
-│   ├── entity/              — JPA-сущности (маппинг таблиц БД)
-│   ├── dto/                 — объекты передачи данных
-│   └── config/              — конфигурация приложения
-├── src/main/resources/
-│   ├── application.properties — конфигурация
-│   └── templates/           — HTML-шаблоны Thymeleaf
-├── src/test/                — тесты
-├── database/
-│   ├── schema.sql           — схема БД и триггеры
-│   └── data.sql             — начальные данные
-└── pom.xml                  — зависимости Maven
-```
-
-### Основные компоненты
-
-- **Controllers** — REST API и MVC-контроллеры для обработки запросов
-- **Services** — сервисный слой, содержит всю бизнес-логику
-- **Repositories** — Spring Data JPA репозитории для работы с сущностями
-- **Entities** — JPA-сущности, маппинг на таблицы PostgreSQL
-- **DTOs** — объекты передачи данных между слоями приложения
