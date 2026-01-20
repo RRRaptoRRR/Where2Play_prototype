@@ -71,7 +71,7 @@ CREATE USER where2play_user WITH ENCRYPTED PASSWORD 'your_password';
 GRANT ALL PRIVILEGES ON DATABASE where2play TO where2play_user;
 ```
 
-2. Запустите SQL-скрипты для инициализации схемы. Все скрипты находятся в папке [Документация БД (DOCX)](docs/БД.docx)
+2. Запустите SQL-скрипты для инициализации схемы. Все скрипты находятся в файлах [Документация БД (DOCX)](docs/БД.docx)
 [Документация БД (PDF)](docs/БД.pdf)
 
 
