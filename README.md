@@ -70,13 +70,9 @@ CREATE USER where2play_user WITH ENCRYPTED PASSWORD 'your_password';
 GRANT ALL PRIVILEGES ON DATABASE where2play TO where2play_user;
 ```
 
-2. Запустите SQL-скрипты для инициализации схемы:
-```bash
-psql -U where2play_user -d where2play -f database/schema.sql
-psql -U where2play_user -d where2play -f database/data.sql
-```
+2. Запустите SQL-скрипты для инициализации схемы. Все скрипты находятся в папке [Документация БД (DOCX)](docs/БД.docx)
+[Документация БД (PDF)](docs/БД.pdf)
 
-> **Примечание:** Все SQL-скрипты находятся в папке `database/`. Полное описание структуры БД с ER-диаграммой см. в [database/schema.sql](database/schema.sql)
 
 ### 3) Настройка конфигурации приложения
 
